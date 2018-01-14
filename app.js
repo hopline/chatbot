@@ -37,6 +37,16 @@ bot.on('message', function(message) {
     }
 });
 
+bot.on('guildMemberAdd', function(member) {
+    member.createDM().then(function(channel) {
+        var message = 'Bienvenue sur la Hopline ! ';
+            message += 'Pour que tout se passe bien lis attentivement : http://hopline.fr/bienvenue ';
+            message += '(un petit lien dans ta signature incitant les gens à nous rejoindre est un gros plus pour la communauté)';
+
+        return channel.send(message);
+    });
+});
+
 /**
  * Login
  */
