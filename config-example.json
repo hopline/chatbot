@@ -1,3 +1,13 @@
 {
-  "token": ""
+  "token": "",
+  "mysql": {
+    "host": "",
+    "user": "",
+    "password": "",
+    "database": ""
+  },
+  "elasticsearch": {
+    "host": "localhost:9200",
+    "log": "trace"
+  }
 }

@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/hopline/chatbot#readme",
   "dependencies": {
-    "discord.js": "^11.2.1"
+    "discord.js": "^11.2.1",
+    "elasticsearch": "^14.0.0",
+    "mysql2": "^1.5.1"
   }
 }
