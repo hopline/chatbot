@@ -22,6 +22,7 @@ const connES = new es.Client({
  * Events
  */
 bot.on('message', function(message) {
+
     if(message.type == 'DEFAULT' && message.channel.type == 'text') {
          // !roll
          if(message.content.indexOf('!roll') == 0) {
@@ -47,8 +48,7 @@ bot.on('message', function(message) {
                      message.reply(strResult);
                 }
              }
-         }
-
+         } // fin  if !roll
 
          // logs
          // by mysql
@@ -60,7 +60,7 @@ bot.on('message', function(message) {
          var sql = 'INSERT INTO discord_messages (discord_id, discord_author_id, discord_author_username, discord_channel_id, discord_channel_name, discord_content, created_at, updated_at) ';
              sql += 'VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
-         var fields = [message.id, message.author.id, message.author.username, message.channel.id, message.channel.name, message.content, datetime, datetime];
+         var fields = [message.id, message.author.id, message.author.username, message.channel.id, message.channel.name, String(message.content.replace(/[^\x00-\x7F]/g, "")), datetime, datetime];
 
          connDB.execute(
             sql,
@@ -80,7 +80,7 @@ bot.on('message', function(message) {
                 discord_author_username: message.author.username,
                 discord_channel_id: message.channel.id,
                 discord_channel_name: message.channel.name,
-                discord_content: message.content,
+                discord_content: message.content.replace(/[^\x00-\x7F]/g, ""),
                 created_at: datetime,
                 updated_at: datetime
             }
