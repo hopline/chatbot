@@ -24,54 +24,65 @@ const connES = new es.Client({
 bot.on('message', function(message) {
 
     if(message.type == 'DEFAULT' && message.channel.type == 'text') {
-         // !roll
-         if(message.content.indexOf('!roll') == 0) {
+        // !roll
+        if(message.content.indexOf('!roll') == 0) {
             var strDice = message.content.replace('!roll ', '');
 
-             if(strDice.length > 2 && strDice.indexOf('d') > 0) {
-                 var dice = strDice.split('d');
+            if(strDice.length > 2 && strDice.indexOf('d') > 0) {
+                var dice = strDice.split('d');
 
-                 if(parseInt(dice[1]) && parseInt(dice[1]) < 101 && parseInt(dice[0]) < 11) {
-                     var result = '';
-                     var strResult = '';
+                if(parseInt(dice[1]) && parseInt(dice[1]) < 101 && parseInt(dice[0]) < 11) {
+                    var result = '';
+                    var strResult = '';
 
-                     for(i=0; i<parseInt(dice[0]); i++) {
-                         result += (result.length == 0) ? '' : ', ';
-                         result += Math.floor(Math.random() * parseInt(dice[1])) + 1;
-                     }
+                    for(i=0; i<parseInt(dice[0]); i++) {
+                        result += (result.length == 0) ? '' : ', ';
+                        result += Math.floor(Math.random() * parseInt(dice[1])) + 1;
+                    }
 
-                     strResult += (parseInt(dice[0]) < 2) ? 'ton résultat pour ' : 'tes résultats pour ';
-                     strResult += strDice;
-                     strResult += (parseInt(dice[0]) < 2) ? ' est : ' : ' sont : ';
-                     strResult += result;
+                    strResult += (parseInt(dice[0]) < 2) ? 'ton résultat pour ' : 'tes résultats pour ';
+                    strResult += strDice;
+                    strResult += (parseInt(dice[0]) < 2) ? ' est : ' : ' sont : ';
+                    strResult += result;
 
-                     message.reply(strResult);
+                    message.reply(strResult);
                 }
-             }
-         } // fin  if !roll
+            }
+        } // fin  if !roll
 
-         // logs
-         // by mysql
-         var today = new Date();
-         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-         var datetime = date + ' ' + time;
+        // convertion des emojis unicode ($&)
+        var ranges = [
+            '\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
+            '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
+            '\ud83d[\ude80-\udeff]'  // U+1F680 to U+1F6FF
+        ];
 
-         var sql = 'INSERT INTO discord_messages (discord_id, discord_author_id, discord_author_username, discord_channel_id, discord_channel_name, discord_content, created_at, updated_at) ';
-             sql += 'VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        var cleanMessage = message.content.replace(
+            new RegExp(ranges.join('|'), 'g'),
+            '<span class="emoji" data-emoji=""></span>');
 
-         var fields = [message.id, message.author.id, message.author.username, message.channel.id, message.channel.name, String(message.content.replace(/[^\x00-\x7F]/g, "")), datetime, datetime];
+        // logs
+        // by mysql
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var datetime = date + ' ' + time;
 
-         connDB.execute(
+        var sql = 'INSERT INTO discord_messages (discord_id, discord_author_id, discord_author_username, discord_channel_id, discord_channel_name, discord_content, created_at, updated_at) ';
+            sql += 'VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+
+        var fields = [message.id, message.author.id, message.author.username, message.channel.id, message.channel.name, cleanMessage, datetime, datetime];
+
+        connDB.execute(
             sql,
             fields,
             function(err, results, fields) {
 
             }
-         );
+        );
 
-         // by elasticsearch
-         connES.create({
+        // by elasticsearch
+        connES.create({
             index: 'hopline',
             type: 'discord_messages',
             id: 'dm' + message.id,
@@ -80,14 +91,14 @@ bot.on('message', function(message) {
                 discord_author_username: message.author.username,
                 discord_channel_id: message.channel.id,
                 discord_channel_name: message.channel.name,
-                discord_content: message.content.replace(/[^\x00-\x7F]/g, ""),
+                discord_content: cleanMessage,
                 created_at: datetime,
                 updated_at: datetime
             }
-            }, function(error, response) {
+        }, function(error, response) {
 
-            }
-         );
+        }
+        );
     }
 });
 
