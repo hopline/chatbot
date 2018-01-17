@@ -59,7 +59,7 @@ bot.on('message', function(message) {
 
         var cleanMessage = message.content.replace(
             new RegExp(ranges.join('|'), 'g'),
-            '<span class="emoji" data-emoji=""></span>');
+            '<span class="emoji" data-emoji="$&"></span>');
 
         // logs
         // by mysql
@@ -77,7 +77,7 @@ bot.on('message', function(message) {
             sql,
             fields,
             function(err, results, fields) {
-
+                console.log(err);
             }
         );
 
