@@ -106,25 +106,6 @@ bot.on('message', function(message) {
 				message.reply(strBeers);
 			});
 		} 
-		//		else if (message.content.indexOf('!biere_detail') == 0 || message.content.indexOf('!bière_détail') == 0) {
-		//			ba.beerPage(message.content.substring ('!biere_detail '.length), function(beers) {
-		//				console.log(beers);
-		//				var arrBeers = JSON.parse(beers);
-		//				var strBeers = "Apatrouvé !"
-		//				if(arrBeers.length > 0) {
-		//					strBeers = "";
-		//					for (var i = 0; i < arrBeers.length; i++) {
-		//						var beer = arrBeers[i];
-		//						if(strBeers.length > 0)
-		//							strBeers += ", ";
-		//						strBeers += beer.beer_name + " ("+beer.brewery_name+")";
-		//					}
-		//				}
-		//				message.reply(strBeers);
-		//			});
-		//			//    message.reply(console.log(beers);
-		//		} 
-
 		else if(message.content.indexOf('!bazoo') == 0) {
 			message.reply('Connard.');
 		}
@@ -147,16 +128,36 @@ bot.on('message', function(message) {
 			var strDeg = message.content.replace('!plato2sg ', '');
 			if(parseInt(strDeg)) {
 				var deg = parseFloat(strDeg);
-				message.reply(Math.round((1+(deg / (258.6 - ( (deg/258.2) *227.1) ) ))*1000)/1000);
+				message.reply(Math.ceil((1+(deg / (258.6 - ( (deg/258.2) *227.1) ) ))*1000)/1000);
 			}
-		}
+		} 
 		else if(message.content.indexOf('!brix2sg') == 0) {
 			var strDeg = message.content.replace('!brix2sg ', '');
 			if(parseInt(strDeg)) {
 				var deg = parseFloat(strDeg);
 				message.reply(Math.ceil(((deg / (258.6-((deg / 258.2)*227.1))) + 1)*1000)/1000);
 			}
-		}// fin  if !commands
+		} else if(message.content.indexOf('!fermbrix2sg') == 0) {
+			var strDeg = message.content.replace('!fermbrix2sg ', '');
+			var degs = strDeg.split(' ');
+			if(degs.length == 2 && parseInt(degs[0]) && parseInt(degs[1])) {
+				orig = parseFloat(degs[0]);
+				current = parseFloat(degs[1]);
+				f= 1.001843-0.002318474*(orig)-0.000007775*(current*orig)-0.000000034*(orig*orig*orig)+0.00574*(current) +0.00003344*(current*current)+0.000000086*(current*current*current)
+				g=(Math.round(f*1000)/1000)
+				message.reply(g);
+			}
+		} else if(message.content.indexOf('!help') == 0) {
+			message.author.createDM().then(function(channel) {
+				var message = 'Petite liste non exhaustive\n';
+				message += 'Pour les douceurs : !roll XdY !café, !bière nomdelabière, !apéro, !arkpéro, !bazoo, !gamb, !alks\n';
+				message += 'Pour les sérieux : !plato2sg degrésplato, !brix2sg degrésbrix, !fermbrix2sg brixoriginal brixactuel\n';
+				message += 'Pour apprendre : !apuglouglou';
+
+				return channel.send(message);
+			});
+
+		}//fin if !commands
 
 		// convertion des emojis unicode ($&)
 		var ranges = [
