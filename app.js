@@ -33,9 +33,9 @@ var fs = require('fs'), xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 let bjcp = [];
 fs.readFile('./bjcp.xml', function(err, data) {
-	    parser.parseString(data, function (err, result) {
-	bjcp.push(result.styleguide.class[0]);
-    });
+	parser.parseString(data, function (err, result) {
+		bjcp.push(result.styleguide.class[0]);
+	});
 });
 /**
  * Events
@@ -184,7 +184,7 @@ bot.on('message', function(message) {
 				var message = 'Petite liste non exhaustive\n';
 				message += 'Pour les douceurs : !roll XdY !café, !bière nomdelabière, !apéro, !arkpéro, !bazoo, !gamb, !alks\n';
 				message += 'Pour les sérieux : !plato2sg degrésplato, !brix2sg degrésbrix, !fermbrix2sg brixoriginal brixactuel\n';
-				message += 'Pour apprendre : !apuglouglou';
+				message += 'Pour apprendre : !apuglouglou, !bjcp nom du style';
 
 				return channel.send(message);
 			});
