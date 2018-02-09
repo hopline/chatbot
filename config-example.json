@@ -1,12 +1,14 @@
 {
   "token": "",
   "mysql": {
+    "enabled": false,
     "host": "",
     "user": "",
     "password": "",
     "database": ""
   },
   "elasticsearch": {
+    "enabled": false,
     "host": "localhost:9200",
     "log": "trace"
   }
