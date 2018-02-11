@@ -13,16 +13,18 @@ const entities = new Entities();
 const bot = new discord.Client();
 const ba = require('beeradvocate-api');
 
-const connDB = null;
-if(config.mysql.enabled) {
+if(config.mysql.enabled == true) {
 	const connDB = db.createConnection({
 		host: config.mysql.host,
 		user: config.mysql.user,
 		password: config.mysql.password,
 		database: config.mysql.database
 	});
+} else {
+	const connDB = null;
 }
-if(config.elasticsearch.enabled) {
+
+if(config.elasticsearch.enabled == true) {
 	const connES = new es.Client({
 		host: config.elasticsearch.host,
 		log: config.elasticsearch.log
@@ -204,7 +206,7 @@ bot.on('message', function(message) {
 
 		// logs
 		// by mysql
-		if(config.mysql.enabled) {
+		if(config.mysql.enabled == true) {
 			var today = new Date();
 			var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -224,7 +226,7 @@ bot.on('message', function(message) {
 			);
 		}
 
-		if(config.elasticsearch.enabled) {
+		if(config.elasticsearch.enabled == true) {
 
 			// by elasticsearch
 			connES.create({
