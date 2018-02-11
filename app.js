@@ -45,6 +45,49 @@ fs.readFile('./bjcp.xml', function(err, data) {
 bot.on('message', function(message) {
 
 	if(message.type == 'DEFAULT' && message.channel.type == 'text') {
+		// logs
+		// by mysql
+		if(config.mysql.enabled == true) {
+			var today = new Date();
+			var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+			var datetime = date + ' ' + time;
+
+			var sql = 'INSERT INTO discord_messages (discord_id, discord_author_id, discord_author_username, discord_channel_id, discord_channel_name, discord_content, created_at, updated_at) ';
+			sql += 'VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+
+			var fields = [message.id, message.author.id, message.author.username, message.channel.id, message.channel.name, cleanMessage, datetime, datetime];
+
+			connDB.execute(
+				sql,
+				fields,
+				function(err, results, fields) {
+					console.log(err);
+				}
+			);
+		}
+
+		if(config.elasticsearch.enabled == true) {
+			// by elasticsearch
+			connES.create({
+					index: 'hopline',
+					type: 'discord_messages',
+					id: 'dm' + message.id,
+					body: {
+						discord_author_id: message.author.id,
+						discord_author_username: message.author.username,
+						discord_channel_id: message.channel.id,
+						discord_channel_name: message.channel.name,
+						discord_content: cleanMessage,
+						created_at: datetime,
+						updated_at: datetime
+					}
+				}, function(error, response) {
+
+				}
+			);
+		}
+
 		// !roll
 		if(message.content.indexOf('!roll') == 0) {
 			var strDice = message.content.replace('!roll ', '');
@@ -204,49 +247,7 @@ bot.on('message', function(message) {
 			new RegExp(ranges.join('|'), 'g'),
 			'<span class="emoji" data-emoji="$&"></span>');
 
-		// logs
-		// by mysql
-		if(config.mysql.enabled == true) {
-			var today = new Date();
-			var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-			var datetime = date + ' ' + time;
 
-			var sql = 'INSERT INTO discord_messages (discord_id, discord_author_id, discord_author_username, discord_channel_id, discord_channel_name, discord_content, created_at, updated_at) ';
-			sql += 'VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-
-			var fields = [message.id, message.author.id, message.author.username, message.channel.id, message.channel.name, cleanMessage, datetime, datetime];
-
-			connDB.execute(
-				sql,
-				fields,
-				function(err, results, fields) {
-					console.log(err);
-				}
-			);
-		}
-
-		if(config.elasticsearch.enabled == true) {
-
-			// by elasticsearch
-			connES.create({
-				index: 'hopline',
-				type: 'discord_messages',
-				id: 'dm' + message.id,
-				body: {
-					discord_author_id: message.author.id,
-					discord_author_username: message.author.username,
-					discord_channel_id: message.channel.id,
-					discord_channel_name: message.channel.name,
-					discord_content: cleanMessage,
-					created_at: datetime,
-					updated_at: datetime
-				}
-			}, function(error, response) {
-
-			}
-			);
-		}
 	}
 });
 
