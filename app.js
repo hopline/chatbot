@@ -12,20 +12,19 @@ const entities = new Entities();
 
 const bot = new discord.Client();
 const ba = require('beeradvocate-api');
-
-if(config.mysql.enabled == true) {
-	const connDB = db.createConnection({
+var connDB = null;
+var connES = null;
+if(config.mysql.enabled) {
+	connDB = db.createConnection({
 		host: config.mysql.host,
 		user: config.mysql.user,
 		password: config.mysql.password,
 		database: config.mysql.database
 	});
-} else {
-	const connDB = null;
 }
 
-if(config.elasticsearch.enabled == true) {
-	const connES = new es.Client({
+if(config.elasticsearch.enabled) {
+	connES = new es.Client({
 		host: config.elasticsearch.host,
 		log: config.elasticsearch.log
 	});
@@ -45,9 +44,21 @@ fs.readFile('./bjcp.xml', function(err, data) {
 bot.on('message', function(message) {
 
 	if(message.type == 'DEFAULT' && message.channel.type == 'text') {
+
+		// convertion des emojis unicode ($&)
+		var ranges = [
+			'\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
+			'\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
+			'\ud83d[\ude80-\udeff]'  // U+1F680 to U+1F6FF
+		];
+
+		var cleanMessage = message.content.replace(
+			new RegExp(ranges.join('|'), 'g'),
+			'<span class="emoji" data-emoji="$&"></span>');
+
 		// logs
 		// by mysql
-		if(config.mysql.enabled == true) {
+		if(config.mysql.enabled) {
 			var today = new Date();
 			var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -67,7 +78,7 @@ bot.on('message', function(message) {
 			);
 		}
 
-		if(config.elasticsearch.enabled == true) {
+		if(config.elasticsearch.enabled) {
 			// by elasticsearch
 			connES.create({
 					index: 'hopline',
@@ -235,18 +246,6 @@ bot.on('message', function(message) {
 			});
 
 		}//fin if !commands
-
-		// convertion des emojis unicode ($&)
-		var ranges = [
-			'\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
-			'\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
-			'\ud83d[\ude80-\udeff]'  // U+1F680 to U+1F6FF
-		];
-
-		var cleanMessage = message.content.replace(
-			new RegExp(ranges.join('|'), 'g'),
-			'<span class="emoji" data-emoji="$&"></span>');
-
 
 	}
 });
