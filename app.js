@@ -170,6 +170,18 @@ bot.on('message', function(message) {
 				message.reply(strBeers);
 			});
 		} 
+		else if(message.content.toUpperCase().indexOf('CTMA ?') == 0) {
+			message.reply('C\'était mieux avant.');
+		}
+		else if(message.content.toUpperCase().indexOf('CDLM ?') == 0) {
+			message.reply('C\'est de la merde. Variante: CDLGM, CVDLGM, cf. !bazoo.');
+		}
+		else if(message.content.toUpperCase().indexOf('BFPTG ?') == 0) {
+			message.reply('Bien fait pour ta gueule.');
+		}
+		else if(message.content.indexOf('!gamb') == 0) {
+			message.reply('Vive l\'Alsace.');
+		}
 		else if(message.content.indexOf('!bazoo') == 0) {
 			message.reply('Connard.');
 		}
@@ -213,6 +225,8 @@ bot.on('message', function(message) {
 			}
 		} else if(message.content.indexOf('!bjcp') == 0) {
 			var msg = message.content.substring ('!bjcp '.length).toUpperCase();
+			var msgsplit = msg.split(' ');
+			var beerapprox = "";
 			replied = false;
 			for(var i = 0; i < bjcp[0].category.length; i++) {
 				for(var j = 0; j < bjcp[0].category[i].subcategory.length; j++) {
@@ -224,16 +238,30 @@ bot.on('message', function(message) {
 						reply += ", FG "+beer.stats[0].fg[0].low+"-"+beer.stats[0].fg[0].high;
 						reply += ", SRM "+beer.stats[0].srm[0].low+"-"+beer.stats[0].srm[0].high;
 						reply += ", Volts "+beer.stats[0].abv[0].low+"-"+beer.stats[0].abv[0].high;
-						reply += "\nExemples: "+beer.examples[0];
+						if(beer.examples != null && beer.examples.len > 0)
+							reply += "\nExemples: "+beer.examples[0];
 						message.reply(reply);
 						break;
+					} else {
+						for(var k = 0; k < msgsplit.length; k++) {
+							if(beer.name[0].toUpperCase().indexOf(msgsplit[k]) > 0) {
+								if(beerapprox.length > 0)
+									beerapprox+= ", ";
+								beerapprox += beer.name[0];
+							}
+							
+						}
 					}
 				}
 				if(replied)
 					break;
 			}
-			if(!replied)
-				message.reply("Apatrouvé !");
+			if(!replied) {
+				if(beerapprox.length > 0) 
+					message.reply("Chépo, tu parles de quoi ? "+beerapprox+" ?");
+				else 
+					message.reply("Apatrouvé !");
+			}
 
 		} else if(message.content.indexOf('!help') == 0) {
 			message.author.createDM().then(function(channel) {
