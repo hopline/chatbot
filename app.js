@@ -244,7 +244,7 @@ bot.on('message', function(message) {
 						break;
 					} else {
 						for(var k = 0; k < msgsplit.length; k++) {
-							if(beer.name[0].toUpperCase().indexOf(msgsplit[k]) > 0) {
+							if(beer.name[0].toUpperCase().indexOf(msgsplit[k]) >= 0) {
 								if(beerapprox.length > 0)
 									beerapprox+= ", ";
 								beerapprox += beer.name[0];
