@@ -17,7 +17,7 @@ class Whisper {
 		let commands = config.plugins.whisper.commands;
 
 		_.forEach(commands, (text, name) => {
-			if(message.content.indexOf('!' + name) !== 0)
+			if(message.content.indexOf(name) !== 0)
 				return;
 
 			message.author.createDM().then((channel) => {

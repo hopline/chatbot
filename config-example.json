@@ -8,17 +8,19 @@
     "apero": {},
     "whisper": {
       "commands": {
-        "help": "Petite liste non exhaustive\n Pour les douceurs : !roll XdY !café, !bière nomdelabière, !apéro, !arkpéro, !bazoo, !gamb, !alks\nPour les sérieux : !plato2sg degrésplato, !brix2sg degrésbrix, !fermbrix2sg brixoriginal brixactuel\nPour apprendre : !apuglouglou, !bjcp nom du style"
+        "!help": "Petite liste non exhaustive\n Pour les douceurs : !roll XdY !café, !bière nomdelabière, !apéro, !arkpéro, !bazoo, !gamb, !alks\nPour les sérieux : !plato2sg degrésplato, !brix2sg degrésbrix, !fermbrix2sg brixoriginal brixactuel\nPour apprendre : !apuglouglou, !bjcp nom du style"
       }
     },
     "text": {
       "commands": {
-        "bazoo": "Connard",
-        "gamb": "Vive l'Alsace.",
-        "alks": ":candy:.",
-        "arkpéro": "'Il est toujours l'heure de l'arkpéro",
-        "apuglouglou": "Très cher, je te conseille de lire ceci : http://univers-biere.net/pbcourants.php ou à défaut si t'enquérir de solutions te paraît trop long, de taper !bazoo",
-        "café": ":coffee:. Tu veux pas une bière plutôt ? :beer:"
+        "!bazoo": "Connard",
+        "!gamb": "Vive l'Alsace.",
+        "!alks": ":candy:.",
+        "!arkpéro": "'Il est toujours l'heure de l'arkpéro",
+        "!apuglouglou": "Très cher, je te conseille de lire ceci : http://univers-biere.net/pbcourants.php ou à défaut si t'enquérir de solutions te paraît trop long, de taper !bazoo",
+        "CTMA ?'": "C'était mieux avant.",
+        "CDLM ?": "C'est de la merde. Variante: CDLGM, CVDLGM, cf. !bazoo.",
+        "BFPTG ?": "Bien fait pour ta gueule."
       }
     },
     "welcome": {
