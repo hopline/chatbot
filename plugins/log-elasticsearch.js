@@ -16,6 +16,17 @@ class LogElasticSearch {
 		if(message.type !== 'DEFAULT' || message.channel.type !== 'text')
 			return;
 			
+			// convertion des emojis unicode ($&)
+		var ranges = [
+			'\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
+			'\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
+			'\ud83d[\ude80-\udeff]'  // U+1F680 to U+1F6FF
+		];
+
+		var cleanMessage = message.content.replace(
+			new RegExp(ranges.join('|'), 'g'),
+			'<span class="emoji" data-emoji="$&"></span>');
+	
 		let today = new Date();
 		let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 		let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
