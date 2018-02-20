@@ -11,6 +11,8 @@
         "!help": "Petite liste non exhaustive\n Pour les douceurs : !roll XdY !café, !bière nomdelabière, !apéro, !arkpéro, !bazoo, !gamb, !alks\nPour les sérieux : !plato2sg degrésplato, !brix2sg degrésbrix, !fermbrix2sg brixoriginal brixactuel\nPour apprendre : !apuglouglou, !bjcp nom du style"
       }
     },
+    "log-mysql": {},
+    "log-elasticsearch": {},
     "text": {
       "commands": {
         "!bazoo": "Connard",
