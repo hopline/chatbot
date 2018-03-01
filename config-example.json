@@ -39,6 +39,10 @@
       "enabled": false,
       "host": "localhost:9200",
       "log": "trace"
+    },
+    "cleverbot": {
+      "id": "API_USER",
+      "key": "API_KEY"
     }
   }
 }

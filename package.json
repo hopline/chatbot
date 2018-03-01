@@ -19,6 +19,7 @@
   "homepage": "https://github.com/hopline/chatbot#readme",
   "dependencies": {
     "beeradvocate-api": "0.0.1",
+    "cleverbot.io": "^1.0.4",
     "discord.js": "^11.2.1",
     "elasticsearch": "^14.0.0",
     "html-entities": "^1.2.1",
